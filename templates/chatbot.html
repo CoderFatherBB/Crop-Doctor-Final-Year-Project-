@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Chatbot</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <div class="background-container">
+        <div class="container">
+            <h1>Chatbot</h1>
+            <p>Ask the chatbot a question!</p>
+        <div class="chat-container">
+            <div id="chat-output"></div>
+            <input type="text" id="user-message" placeholder="Type your message...">
+            <button onclick="sendMessage()">Send</button>
+        </div>
+
+        <script>
+            async function sendMessage() {
+                const userMessage = document.getElementById('user-message').value;
+
+                if (!userMessage) {
+                    alert("Please enter a message!");
+                    return;
+                }
+
+                // Send user message to the chatbot backend
+                const response = await fetch('/chat', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ message: userMessage })
+                });
+
+                const data = await response.json();
+
+                // Display the chatbot's response
+                const chatOutput = document.getElementById('chat-output');
+                const userBubble = `<div class="bubble user">${userMessage}</div>`;
+                const botBubble = `<div class="bubble bot">${data.response || "Error!"}</div>`;
+                chatOutput.innerHTML += userBubble + botBubble;
+
+                // Clear the input
+                document.getElementById('user-message').value = '';
+            }
+        </script>
+        <a href="{{ redirect_url }}" class="btn">Go Back to Dashboard</a>
+    </div>
+</body>
+</html>

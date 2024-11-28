@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Upload Image</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <div class="background-container">
+        <div class="container">
+            <h1>Uploaded Image Details</h1>
+            {% if image_path %}
+                <div class="image-container">
+                    <img src="{{ url_for('static', filename='uploads/' + image_path) }}" alt="Uploaded Image" class="uploaded-image">
+                </div>
+                <div class="details">
+                    <p><strong>Class:</strong> {{ class_name }}</p>
+                    <p><strong>Disease:</strong> {{ disease }}</p>
+                </div>
+            {% else %}
+                <p>No image uploaded yet or an error occurred.</p>
+            {% endif %}
+            <a href="{{ redirect_url }}" class="btn">Go Back to Dashboard</a>
+        </div>
+    </div>
+</body>
+</html>

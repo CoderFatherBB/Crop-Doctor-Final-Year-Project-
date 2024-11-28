@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Train Model</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <style>
+        /* Center the loading spinner */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+
+        .spinner {
+            border: 8px solid #f3f3f3;
+            border-top: 8px solid #3498db;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+    <script>
+        function showLoading() {
+            document.getElementById("loading-overlay").style.display = "flex";
+        }
+
+        function generateClassFields() {
+            const classesDiv = document.getElementById("classes");
+            classesDiv.innerHTML = ""; // Clear existing fields
+
+            const numClasses = parseInt(document.getElementById("num_classes").value);
+            if (isNaN(numClasses) || numClasses <= 0) {
+                alert("Please enter a valid number of classes.");
+                return;
+            }
+
+            for (let i = 1; i <= numClasses; i++) {
+                const classDiv = document.createElement("div");
+                classDiv.innerHTML = `
+                    <h4>Class ${i}</h4>
+                    <label for="class_name_${i}">Class Name:</label>
+                    <input type="text" name="class_name_${i}" id="class_name_${i}" required>
+                    <label for="class_images_${i}">Upload Images:</label>
+                    <input type="file" name="class_images_${i}" id="class_images_${i}" multiple accept="image/*" required>
+                    <p style="font-size: small; color: gray;">Minimum 5 images required.</p>
+                `;
+                classesDiv.appendChild(classDiv);
+            }
+        }
+
+        function validateForm() {
+            const numClasses = parseInt(document.getElementById("num_classes").value);
+            for (let i = 1; i <= numClasses; i++) {
+                const files = document.getElementById(`class_images_${i}`).files;
+                if (files.length < 5) {
+                    alert(`Please upload at least 5 images for Class ${i}.`);
+                    return false;
+                }
+            }
+            showLoading();
+            return true;
+        }
+    </script>
+</head>
+<body>
+    <div class="background-container">
+        <div class="container">
+            <h1>Train a New Model</h1>
+            <form action="/train_model" method="POST" enctype="multipart/form-data" onsubmit="return validateForm();">
+                <label for="crop_name">Crop Name:</label>
+                <input type="text" name="crop_name" id="crop_name" required>
+
+                <label for="num_classes">Number of Classes:</label>
+                <input type="text" name="num_classes" id="num_classes" required>
+
+                <button type="button" onclick="generateClassFields()">Generate Class Fields</button>
+                <div id="classes"></div>
+                <button type="submit">Submit</button>
+            </form>
+            <a href="{{ url_for('admin_dashboard')}}" class="btn">Go Back to Dashboard</a>
+        </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div id="loading-overlay" class="loading-overlay">
+        <div class="spinner"></div>
+        <p>Uploading and processing... Please wait.</p>
+    </div>
+</body>
+</html>

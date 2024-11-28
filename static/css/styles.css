@@ -1,0 +1,296 @@
+/* General body styling */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+}
+
+/* Background container */
+.background-container {
+    background: url('{{ url_for('static', filename='images/farmer.png') }}') no-repeat center center;
+    background-size: cover;
+    background-color: #add8e6; /* Light blue background for areas without image */
+    min-height: 100vh; /* Ensure it covers the full viewport height */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+    
+}
+
+/* Main container styling (used for login and dashboard) */
+.container {
+    text-align: center;
+    background-color: rgba(255, 255, 255, 0.8); /* White background with slight transparency */
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    width: 80%;
+    max-width: 400px;
+}
+
+/* Larger container for dashboard (if needed) */
+.dashboard-container {
+    max-width: 600px; /* Slightly larger for user dashboard */
+}
+
+/* Headings */
+h1 {
+    color: #333;
+    font-size: 24px;
+}
+
+h2 {
+    color: #333;
+    font-size: 20px;
+    margin-top: 20px;
+}
+
+p1 {
+    font-size: 20px;
+    color: #000000;
+    font-weight: bold;
+}
+
+/* Form styling */
+form {
+    margin-top: 20px;
+}
+
+input[type="text"],
+input[type="password"],
+button {
+    display: block;
+    margin: 10px auto;
+    padding: 10px;
+    width: 80%;
+    max-width: 300px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+button {
+    background-color: #28a745;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    display: block;
+    margin: 0 auto;
+}
+
+button:hover {
+    background-color: #218838;
+}
+
+/* Contributor section */
+.contributors {
+    margin-top: 20px;
+    font-size: 14px;
+    color: #333;
+    text-align: center;
+}
+
+/* Supported crops section for dashboard */
+.supported-crops {
+    margin-top: 20px;
+    text-align: left;
+}
+
+.supported-crops ul {
+    list-style-type: square;
+    margin-left: 20px;
+}
+
+.supported-crops li {
+    font-size: 16px;
+    color: #333;
+}
+
+/* Upload options section for dashboard */
+.upload-options {
+    margin-top: 20px;
+}
+
+.upload-options button {
+    background-color: #007bff; /* Blue button */
+    /* margin: 10px; */
+    display: block;
+    margin: 0 auto;
+}
+
+.upload-options button:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+}
+
+/* Chatbot button styling */
+.chatbot button {
+    background-color: #6c757d; /* Gray button for chatbot */
+    display: block;
+    margin: 0 auto;
+}
+
+.chatbot button:hover {
+    background-color: #5a6268; /* Darker gray on hover */
+}
+
+
+/* Image container */
+.image-container {
+    margin: 20px auto;
+    text-align: center;
+}
+
+.uploaded-image {
+    max-width: 100%;
+    height: auto;
+    border: 2px solid #ddd;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+/* Details section */
+.details {
+    margin-top: 20px;
+    text-align: center;
+    font-size: 18px;
+    color: #333;
+}
+
+.details p {
+    margin: 5px 0;
+}
+
+/* Back to dashboard button */
+.btn {
+    display: inline-block;
+    margin-top: 20px;
+    padding: 10px 20px;
+    background-color: #28a745;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 16px;
+    transition: background-color 0.3s;
+}
+
+.btn:hover {
+    background-color: #218838;
+}
+
+video {
+    display: block;
+    margin: 20px auto;
+    max-width: 100%;
+    border: 2px solid #ddd;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+canvas {
+    display: none; /* Hidden unless debugging */
+}
+
+/* Camera Overlay */
+#camera-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.8);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+}
+
+#camera-container video {
+    width: 80%;
+    max-width: 600px;
+    border-radius: 10px;
+    border: 2px solid white;
+}
+
+#camera-container button {
+    margin-top: 10px;
+    padding: 10px 20px;
+    font-size: 16px;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#camera-container button.capture {
+    background-color: #007BFF;
+}
+
+#camera-container button.stop {
+    background-color: #DC3545;
+}
+
+
+/* Small screens: Phones (less than 600px) */
+/* @media (max-width: 599px) {
+    .container {
+        text-align: center;
+        background-color: rgba(255, 255, 255, 0.8); /* White background with slight transparency *//*
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        width: 80%;
+        max-width: 1000px;
+    }
+    
+} */
+
+.chat-container {
+    width: 400px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+#chat-output {
+    height: 300px;
+    overflow-y: scroll;
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+.bubble {
+    display: inline-block;
+    padding: 10px;
+    margin: 5px;
+    border-radius: 10px;
+}
+
+.bubble.user {
+    background-color: #007BFF;
+    color: white;
+    text-align: left;
+}
+
+.bubble.bot {
+    background-color: #E9E9E9;
+    color: black;
+    text-align: left;
+}
+
+
+/* Medium screens: Tablets (600px to 1199px) */
+@media (min-width: 600px) and (max-width: 1199px) {
+    .container {
+        text-align: center;
+        background-color: rgba(255, 255, 255, 0.8); /* White background with slight transparency */
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        width: 80%;
+        max-width: 700px;
+    }
+    
+}

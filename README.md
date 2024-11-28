@@ -89,32 +89,37 @@ project/
 ---
 
 ## Screenshots
+1. **Login Dashboard**
+   - To lognin as User use username and password as: user
+   - To lognin as Admin use username and password as: admin
 
-1. **User Dashboard**:
+   ![alt text](image.png)
+
+2. **User Dashboard**:
    - Upload crop image.
    - Chatbot integration.
 
-   *[Add a screenshot of the User Dashboard here]*
+   ![alt text](App_Images/image-1.png)
 
-2. **Admin Dashboard**:
+3. **Admin Dashboard**:
    - Train a new model.
 
-   *[Add a screenshot of the Admin Dashboard here]*
+   ![alt text](App_Images/image-2.png)
 
-3. **Train Model**:
+4. **Train Model**:
    - Crop and class selection with image upload.
 
-   *[Add a screenshot of the Train Model page here]*
+   ![alt text](App_Images/image-3.png)    ![alt text](App_Images/image-4.png)
 
-4. **Disease Detection Results**:
+5. **Disease Detection Results**:
    - Shows the detected disease with confidence.
 
-   *[Add a screenshot of the Disease Detection Results here]*
+   ![alt text](App_Images/image-5.png)    ![alt text](App_Images/image-6.png)
 
-5. **Chatbot**:
+6. **Chatbot**:
    - Interaction with AgriBot.
 
-   *[Add a screenshot of the Chatbot interface here]*
+   ![alt text](App_Images/image-7.png)
 
 ---
 

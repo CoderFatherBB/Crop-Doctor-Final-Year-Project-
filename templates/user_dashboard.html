@@ -1,0 +1,782 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>User Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <h1>Welcome, User!</h1>
+    <div style="background: url('{{ url_for('static', filename='images/sugarcane.png') }}') no-repeat center center; background-size: cover; padding: 20px; margin-bottom: 20px;">
+        <p>Supported Crop: Sugarcane</p>
+    </div>
+    <div style="background: url('{{ url_for('static', filename='images/grapes.png') }}') no-repeat center center; background-size: cover; padding: 20px;">
+        <p>Supported Crop: Grapes</p>
+    </div>
+    <form method="POST">
+        <button type="submit">Upload Image</button>
+    </form>
+</body>
+</html> -->
+
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>User Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <div class="background-container">
+        <div class="container">
+            <h1>Welcome, User!</h1>
+            <p>Select a feature to proceed:</p>
+            
+            <!-- Supported Crops Section -->
+            <!-- <div class="supported-crops">
+                <h2>Supported Crops:</h2>
+                <div style="background: url('{{ url_for('static', filename='images/sugarcane.png') }}') no-repeat center center; background-size: cover; padding: 20px; margin-bottom: 20px;">
+                    <p1>Supported Crop: Sugarcane</p1>
+                </div>
+                <div style="background: url('{{ url_for('static', filename='images/grapes.png') }}') no-repeat center center; background-size: cover; padding: 20px;">
+                    <p1>Supported Crop: Grapes</p1>
+                </div>
+            </div>
+
+            <!-- Options for uploading/taking a photo -->
+            <!-- <div class="upload-options">
+                <h2>Upload or Capture:</h2>
+                <button onclick="uploadPhoto()">Upload Photo</button>
+                <button onclick="capturePhoto()">Take a Photo</button>
+            </div>
+
+            <!-- Chatbot Option -->
+            <!-- <div class="chatbot">
+                <h2>Need Help?</h2>
+                <button onclick="openChat()">Chat with us</button>
+            </div>
+        </div>
+    </div> --> 
+
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <title>User Dashboard</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+        <script>
+            // Automatically update crop selection in the session
+            function setCrop(selectedCrop) {
+                fetch('/set_crop', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ crop: selectedCrop }),
+                })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Failed to set crop. Please try again.');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        if (data.success) {
+                            alert(`Crop selected: ${selectedCrop}`);
+                        } else {
+                            alert('Error setting crop. Please try again.');
+                        }
+                    })
+                    .catch(error => alert('Error: ' + error.message));
+            }
+    
+            // Open file upload dialog
+            function uploadPhoto() {
+                const fileInput = document.createElement('input');
+                fileInput.type = 'file';
+                fileInput.accept = 'image/*';
+    
+                fileInput.onchange = () => {
+                    const file = fileInput.files[0];
+                    if (file) {
+                        const formData = new FormData();
+                        formData.append('file', file);
+    
+                        fetch('/upload', {
+                            method: 'POST',
+                            body: formData,
+                        })
+                            .then(response => {
+                                if (response.ok) {
+                                    return response.text(); // Render server response as HTML
+                                } else {
+                                    throw new Error('Error uploading file.');
+                                }
+                            })
+                            .then(html => {
+                                document.open();
+                                document.write(html);
+                                document.close();
+                            })
+                            .catch(error => alert('Error uploading file: ' + error.message));
+                    }
+                };
+    
+                fileInput.click();
+            }
+    
+            // Placeholder for camera capture
+            function capturePhoto() {
+            // Create required DOM elements
+            const cameraContainer = document.createElement('div');
+            cameraContainer.style.position = 'fixed';
+            cameraContainer.style.top = '0';
+            cameraContainer.style.left = '0';
+            cameraContainer.style.width = '100vw';
+            cameraContainer.style.height = '100vh';
+            cameraContainer.style.backgroundColor = 'rgba(0, 0, 0, 0.8)';
+            cameraContainer.style.display = 'flex';
+            cameraContainer.style.flexDirection = 'column';
+            cameraContainer.style.alignItems = 'center';
+            cameraContainer.style.justifyContent = 'center';
+            cameraContainer.style.zIndex = '9999';
+
+            const video = document.createElement('video');
+            video.style.width = '80%';
+            video.style.maxWidth = '600px';
+            video.style.borderRadius = '10px';
+            video.style.border = '2px solid white';
+            video.autoplay = true;
+
+            const canvas = document.createElement('canvas');
+            canvas.style.display = 'none'; // Canvas is used for capturing but not displayed
+
+            const captureButton = document.createElement('button');
+            captureButton.innerText = "Capture Photo";
+            captureButton.style.marginTop = '20px';
+            captureButton.style.padding = '10px 20px';
+            captureButton.style.fontSize = '16px';
+            captureButton.style.color = 'white';
+            captureButton.style.backgroundColor = '#007BFF';
+            captureButton.style.border = 'none';
+            captureButton.style.borderRadius = '5px';
+            captureButton.style.cursor = 'pointer';
+
+            const stopButton = document.createElement('button');
+            stopButton.innerText = "Stop Camera";
+            stopButton.style.marginTop = '10px';
+            stopButton.style.padding = '10px 20px';
+            stopButton.style.fontSize = '16px';
+            stopButton.style.color = 'white';
+            stopButton.style.backgroundColor = '#DC3545';
+            stopButton.style.border = 'none';
+            stopButton.style.borderRadius = '5px';
+            stopButton.style.cursor = 'pointer';
+
+            const loader = document.createElement('div');
+            loader.style.marginTop = '20px';
+            loader.style.width = '50px';
+            loader.style.height = '50px';
+            loader.style.border = '6px solid #f3f3f3';
+            loader.style.borderTop = '6px solid #007BFF';
+            loader.style.borderRadius = '50%';
+            loader.style.animation = 'spin 1s linear infinite';
+            loader.style.display = 'none'; // Initially hidden
+
+            // Append elements to the container
+            cameraContainer.appendChild(video);
+            cameraContainer.appendChild(canvas);
+            cameraContainer.appendChild(captureButton);
+            cameraContainer.appendChild(stopButton);
+            cameraContainer.appendChild(loader);
+            document.body.appendChild(cameraContainer);
+
+            // Add spinning animation to loader
+            const style = document.createElement('style');
+            style.innerHTML = `
+                @keyframes spin {
+                    0% { transform: rotate(0deg); }
+                    100% { transform: rotate(360deg); }
+                }
+            `;
+            document.head.appendChild(style);
+
+            // Step 1: Enumerate devices and find standard rear camera
+            navigator.mediaDevices.enumerateDevices()
+                .then((devices) => {
+                    const videoDevices = devices.filter(device => device.kind === 'videoinput');
+                    let preferredDeviceId = null;
+
+                    // Look for a device labeled 'back' or 'rear'
+                    for (const device of videoDevices) {
+                        if (device.label.toLowerCase().includes('back')) {
+                            preferredDeviceId = device.deviceId;
+                            break;
+                        }
+                    }
+
+                    // If no preferred rear camera is found, fallback to the first video device
+                    const constraints = preferredDeviceId
+                        ? { video: { deviceId: { exact: preferredDeviceId } } }
+                        : { video: { facingMode: { ideal: 'environment' } } };
+
+                    // Step 2: Access the preferred camera
+                    return navigator.mediaDevices.getUserMedia(constraints);
+                })
+                .then((stream) => {
+                    video.srcObject = stream;
+                    video.play();
+
+                    captureButton.addEventListener('click', () => {
+                        captureButton.disabled = true;
+                        loader.style.display = 'block';
+
+                        canvas.width = video.videoWidth;
+                        canvas.height = video.videoHeight;
+                        const ctx = canvas.getContext('2d');
+                        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+                        const timestamp = new Date().toISOString().replace(/[-:.]/g, '');
+                        const uniqueFilename = `captured_photo_${timestamp}.png`;
+
+                        canvas.toBlob((blob) => {
+                            const formData = new FormData();
+                            formData.append('file', blob, uniqueFilename);
+
+                            fetch('/upload', {
+                                method: 'POST',
+                                body: formData
+                            })
+                            .then(response => {
+                                if (response.ok) {
+                                    return response.text();
+                                } else {
+                                    throw new Error("Error uploading captured photo.");
+                                }
+                            })
+                            .then(html => {
+                                document.body.removeChild(cameraContainer);
+                                document.open();
+                                document.write(html);
+                                document.close();
+                            })
+                            .catch(error => {
+                                alert("Error: " + error.message);
+                                captureButton.disabled = false;
+                                loader.style.display = 'none';
+                            });
+                        });
+                    });
+
+                    stopButton.addEventListener('click', () => {
+                        stream.getTracks().forEach(track => track.stop());
+                        document.body.removeChild(cameraContainer);
+                    });
+                })
+                .catch((error) => {
+                    alert("Unable to access camera: " + error.message);
+                    document.body.removeChild(cameraContainer);
+                });
+        }
+
+        function openChat() {
+            window.location.href = '/chatbot';
+        }
+        </script>
+    </head>
+    <body>
+        <div class="background-container">
+            <div class="container">
+                <h1>Welcome, User!</h1>
+                <p>Select a crop and proceed with the options below:</p>
+    
+                <!-- Supported Crops Section -->
+                <div class="supported-crops">
+                    <h2>Supported Crops:</h2>
+                    <!-- Crop 1 -->
+                    <div style="background: url('{{ url_for('static', filename='images/sugarcane.png') }}') no-repeat center center; background-size: cover; padding: 20px; margin-bottom: 20px;">
+                        <label>
+                            <input type="radio" name="crop" value="sugarcane" onchange="setCrop(this.value)">
+                            <span>Supported Crop: Sugarcane</span>
+                        </label>
+                    </div>
+                    <!-- Crop 2 -->
+                    <div style="background: url('{{ url_for('static', filename='images/grapes.png') }}') no-repeat center center; background-size: cover; padding: 20px;">
+                        <label>
+                            <input type="radio" name="crop" value="grapes" onchange="setCrop(this.value)">
+                            <span>Supported Crop: Grapes</span>
+                        </label>
+                    </div>
+                </div>
+    
+                <!-- Options for Upload/Take a Photo -->
+                <div class="upload-options">
+                    <h2>Upload or Capture Image:</h2>
+                    <button onclick="uploadPhoto()">Upload Photo</button>
+                    <button onclick="capturePhoto()">Take a Photo</button>
+                </div>
+    
+                <!-- Chatbot Section -->
+                <div class="chatbot">
+                    <h2>Need Help?</h2>
+                    <button onclick="openChat()">Chat with us</button>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
+    
+<!-- 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>User Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <script>
+        // Redirect based on user selection
+        function validateCropSelection() {
+            const selectedCrop = document.querySelector('input[name="crop"]:checked');
+            if (!selectedCrop) {
+                alert("Please select a crop before proceeding.");
+                return false;
+            }
+            return true;
+        }
+
+        // Open the file upload dialog
+        function uploadPhoto() {
+            const fileInput = document.createElement('input');
+            fileInput.type = 'file';
+            fileInput.accept = 'image/*';
+            fileInput.onchange = () => {
+                const file = fileInput.files[0];
+                if (file) {
+                    const formData = new FormData();
+                    formData.append('file', file);
+
+                    fetch('/upload', {
+                        method: 'POST',
+                        body: formData,
+                    })
+                        .then(response => {
+                            if (response.ok) {
+                                return response.text(); // Render server response as HTML
+                            } else {
+                                throw new Error('Error uploading file.');
+                            }
+                        })
+                        .then(html => {
+                            document.open();
+                            document.write(html);
+                            document.close();
+                        })
+                        .catch(error => alert('Error uploading file: ' + error.message));
+                }
+            };
+            fileInput.click();
+        }
+
+        function capturePhoto() {
+            // Create required DOM elements
+            const cameraContainer = document.createElement('div');
+            cameraContainer.style.position = 'fixed';
+            cameraContainer.style.top = '0';
+            cameraContainer.style.left = '0';
+            cameraContainer.style.width = '100vw';
+            cameraContainer.style.height = '100vh';
+            cameraContainer.style.backgroundColor = 'rgba(0, 0, 0, 0.8)';
+            cameraContainer.style.display = 'flex';
+            cameraContainer.style.flexDirection = 'column';
+            cameraContainer.style.alignItems = 'center';
+            cameraContainer.style.justifyContent = 'center';
+            cameraContainer.style.zIndex = '9999';
+
+            const video = document.createElement('video');
+            video.style.width = '80%';
+            video.style.maxWidth = '600px';
+            video.style.borderRadius = '10px';
+            video.style.border = '2px solid white';
+            video.autoplay = true;
+
+            const canvas = document.createElement('canvas');
+            canvas.style.display = 'none'; // Canvas is used for capturing but not displayed
+
+            const captureButton = document.createElement('button');
+            captureButton.innerText = "Capture Photo";
+            captureButton.style.marginTop = '20px';
+            captureButton.style.padding = '10px 20px';
+            captureButton.style.fontSize = '16px';
+            captureButton.style.color = 'white';
+            captureButton.style.backgroundColor = '#007BFF';
+            captureButton.style.border = 'none';
+            captureButton.style.borderRadius = '5px';
+            captureButton.style.cursor = 'pointer';
+
+            const stopButton = document.createElement('button');
+            stopButton.innerText = "Stop Camera";
+            stopButton.style.marginTop = '10px';
+            stopButton.style.padding = '10px 20px';
+            stopButton.style.fontSize = '16px';
+            stopButton.style.color = 'white';
+            stopButton.style.backgroundColor = '#DC3545';
+            stopButton.style.border = 'none';
+            stopButton.style.borderRadius = '5px';
+            stopButton.style.cursor = 'pointer';
+
+            const loader = document.createElement('div');
+            loader.style.marginTop = '20px';
+            loader.style.width = '50px';
+            loader.style.height = '50px';
+            loader.style.border = '6px solid #f3f3f3';
+            loader.style.borderTop = '6px solid #007BFF';
+            loader.style.borderRadius = '50%';
+            loader.style.animation = 'spin 1s linear infinite';
+            loader.style.display = 'none'; // Initially hidden
+
+            // Append elements to the container
+            cameraContainer.appendChild(video);
+            cameraContainer.appendChild(canvas);
+            cameraContainer.appendChild(captureButton);
+            cameraContainer.appendChild(stopButton);
+            cameraContainer.appendChild(loader);
+            document.body.appendChild(cameraContainer);
+
+            // Add spinning animation to loader
+            const style = document.createElement('style');
+            style.innerHTML = `
+                @keyframes spin {
+                    0% { transform: rotate(0deg); }
+                    100% { transform: rotate(360deg); }
+                }
+            `;
+            document.head.appendChild(style);
+
+            // Step 1: Enumerate devices and find standard rear camera
+            navigator.mediaDevices.enumerateDevices()
+                .then((devices) => {
+                    const videoDevices = devices.filter(device => device.kind === 'videoinput');
+                    let preferredDeviceId = null;
+
+                    // Look for a device labeled 'back' or 'rear'
+                    for (const device of videoDevices) {
+                        if (device.label.toLowerCase().includes('back')) {
+                            preferredDeviceId = device.deviceId;
+                            break;
+                        }
+                    }
+
+                    // If no preferred rear camera is found, fallback to the first video device
+                    const constraints = preferredDeviceId
+                        ? { video: { deviceId: { exact: preferredDeviceId } } }
+                        : { video: { facingMode: { ideal: 'environment' } } };
+
+                    // Step 2: Access the preferred camera
+                    return navigator.mediaDevices.getUserMedia(constraints);
+                })
+                .then((stream) => {
+                    video.srcObject = stream;
+                    video.play();
+
+                    captureButton.addEventListener('click', () => {
+                        captureButton.disabled = true;
+                        loader.style.display = 'block';
+
+                        canvas.width = video.videoWidth;
+                        canvas.height = video.videoHeight;
+                        const ctx = canvas.getContext('2d');
+                        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+                        const timestamp = new Date().toISOString().replace(/[-:.]/g, '');
+                        const uniqueFilename = `captured_photo_${timestamp}.png`;
+
+                        canvas.toBlob((blob) => {
+                            const formData = new FormData();
+                            formData.append('file', blob, uniqueFilename);
+
+                            fetch('/upload', {
+                                method: 'POST',
+                                body: formData
+                            })
+                            .then(response => {
+                                if (response.ok) {
+                                    return response.text();
+                                } else {
+                                    throw new Error("Error uploading captured photo.");
+                                }
+                            })
+                            .then(html => {
+                                document.body.removeChild(cameraContainer);
+                                document.open();
+                                document.write(html);
+                                document.close();
+                            })
+                            .catch(error => {
+                                alert("Error: " + error.message);
+                                captureButton.disabled = false;
+                                loader.style.display = 'none';
+                            });
+                        });
+                    });
+
+                    stopButton.addEventListener('click', () => {
+                        stream.getTracks().forEach(track => track.stop());
+                        document.body.removeChild(cameraContainer);
+                    });
+                })
+                .catch((error) => {
+                    alert("Unable to access camera: " + error.message);
+                    document.body.removeChild(cameraContainer);
+                });
+        }
+
+        function openChat() {
+            alert("Chatbot functionality coming soon!");
+        }
+    </script>
+</head>
+<body>
+    <div class="background-container">
+        <div class="container">
+            <h1>Welcome, User!</h1>
+            <p1>Select a crop and proceed with the options below:</p1>
+
+            <!-- Supported Crops Section 
+            <form action="{{ url_for('set_crop') }}" method="POST" onsubmit="return validateCropSelection();">
+                <div class="supported-crops">
+                    <h2>Supported Crops:</h2>
+                    <!-- Crop 1 
+                    <div style="background: url('{{ url_for('static', filename='images/sugarcane.png') }}') no-repeat center center; background-size: cover; padding: 20px; margin-bottom: 20px;">
+                        <label>
+                            <input type="radio" name="crop" value="sugarcane">
+                            <span>Supported Crop: Sugarcane</span>
+                        </label>
+                    </div>
+                    <!-- Crop 2 
+                    <div style="background: url('{{ url_for('static', filename='images/grapes.png') }}') no-repeat center center; background-size: cover; padding: 20px;">
+                        <label>
+                            <input type="radio" name="crop" value="grapes">
+                            <span>Supported Crop: Grapes</span>
+                        </label>
+                    </div>
+                </div>
+                <!-- <button type="submit">Confirm Crop</button> 
+            </form>
+
+            <!-- Options for Upload/Take a Photo 
+            <div class="upload-options">
+                <h2>Upload or Capture Image:</h2>
+                <button onclick="uploadPhoto()">Upload Photo</button>
+                <button onclick="capturePhoto()">Take a Photo</button>
+            </div>
+
+            <!-- Chatbot Section
+            <div class="chatbot">
+                <h2>Need Help?</h2>
+                <button onclick="openChat()">Chat with us</button>
+            </div>
+        </div>
+    </div>
+</body>
+</html> -->
+    
+<!--     
+
+    <!-- Placeholder for additional scripts 
+    <script>
+        function uploadPhoto() {
+            const fileInput = document.createElement('input');
+            fileInput.type = 'file';
+            fileInput.accept = 'image/*';
+
+            fileInput.onchange = () => {
+                const file = fileInput.files[0];
+                if (file) {
+                    const formData = new FormData();
+                    formData.append('file', file);
+
+                    fetch('/upload', {
+                        method: 'POST',
+                        body: formData
+                    })
+                    .then(response => {
+                        // Redirect to the rendered page from the server
+                        if (response.ok) {
+                            return response.text(); // Parse response as text (HTML)
+                        } else {
+                            throw new Error('Error uploading file.');
+                        }
+                    })
+                    .then(html => {
+                        // Replace the current document content with the server-rendered HTML
+                        document.open();
+                        document.write(html);
+                        document.close();
+                    })
+                    .catch(error => {
+                        alert('Error uploading file: ' + error.message);
+                    });
+                }
+            };
+
+            fileInput.click();
+        }
+
+        function capturePhoto() {
+            // Create required DOM elements
+            const cameraContainer = document.createElement('div');
+            cameraContainer.style.position = 'fixed';
+            cameraContainer.style.top = '0';
+            cameraContainer.style.left = '0';
+            cameraContainer.style.width = '100vw';
+            cameraContainer.style.height = '100vh';
+            cameraContainer.style.backgroundColor = 'rgba(0, 0, 0, 0.8)';
+            cameraContainer.style.display = 'flex';
+            cameraContainer.style.flexDirection = 'column';
+            cameraContainer.style.alignItems = 'center';
+            cameraContainer.style.justifyContent = 'center';
+            cameraContainer.style.zIndex = '9999';
+
+            const video = document.createElement('video');
+            video.style.width = '80%';
+            video.style.maxWidth = '600px';
+            video.style.borderRadius = '10px';
+            video.style.border = '2px solid white';
+            video.autoplay = true;
+
+            const canvas = document.createElement('canvas');
+            canvas.style.display = 'none'; // Canvas is used for capturing but not displayed
+
+            const captureButton = document.createElement('button');
+            captureButton.innerText = "Capture Photo";
+            captureButton.style.marginTop = '20px';
+            captureButton.style.padding = '10px 20px';
+            captureButton.style.fontSize = '16px';
+            captureButton.style.color = 'white';
+            captureButton.style.backgroundColor = '#007BFF';
+            captureButton.style.border = 'none';
+            captureButton.style.borderRadius = '5px';
+            captureButton.style.cursor = 'pointer';
+
+            const stopButton = document.createElement('button');
+            stopButton.innerText = "Stop Camera";
+            stopButton.style.marginTop = '10px';
+            stopButton.style.padding = '10px 20px';
+            stopButton.style.fontSize = '16px';
+            stopButton.style.color = 'white';
+            stopButton.style.backgroundColor = '#DC3545';
+            stopButton.style.border = 'none';
+            stopButton.style.borderRadius = '5px';
+            stopButton.style.cursor = 'pointer';
+
+            const loader = document.createElement('div');
+            loader.style.marginTop = '20px';
+            loader.style.width = '50px';
+            loader.style.height = '50px';
+            loader.style.border = '6px solid #f3f3f3';
+            loader.style.borderTop = '6px solid #007BFF';
+            loader.style.borderRadius = '50%';
+            loader.style.animation = 'spin 1s linear infinite';
+            loader.style.display = 'none'; // Initially hidden
+
+            // Append elements to the container
+            cameraContainer.appendChild(video);
+            cameraContainer.appendChild(canvas);
+            cameraContainer.appendChild(captureButton);
+            cameraContainer.appendChild(stopButton);
+            cameraContainer.appendChild(loader);
+            document.body.appendChild(cameraContainer);
+
+            // Add spinning animation to loader
+            const style = document.createElement('style');
+            style.innerHTML = `
+                @keyframes spin {
+                    0% { transform: rotate(0deg); }
+                    100% { transform: rotate(360deg); }
+                }
+            `;
+            document.head.appendChild(style);
+
+            // Step 1: Enumerate devices and find standard rear camera
+            navigator.mediaDevices.enumerateDevices()
+                .then((devices) => {
+                    const videoDevices = devices.filter(device => device.kind === 'videoinput');
+                    let preferredDeviceId = null;
+
+                    // Look for a device labeled 'back' or 'rear'
+                    for (const device of videoDevices) {
+                        if (device.label.toLowerCase().includes('back')) {
+                            preferredDeviceId = device.deviceId;
+                            break;
+                        }
+                    }
+
+                    // If no preferred rear camera is found, fallback to the first video device
+                    const constraints = preferredDeviceId
+                        ? { video: { deviceId: { exact: preferredDeviceId } } }
+                        : { video: { facingMode: { ideal: 'environment' } } };
+
+                    // Step 2: Access the preferred camera
+                    return navigator.mediaDevices.getUserMedia(constraints);
+                })
+                .then((stream) => {
+                    video.srcObject = stream;
+                    video.play();
+
+                    captureButton.addEventListener('click', () => {
+                        captureButton.disabled = true;
+                        loader.style.display = 'block';
+
+                        canvas.width = video.videoWidth;
+                        canvas.height = video.videoHeight;
+                        const ctx = canvas.getContext('2d');
+                        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+                        const timestamp = new Date().toISOString().replace(/[-:.]/g, '');
+                        const uniqueFilename = `captured_photo_${timestamp}.png`;
+
+                        canvas.toBlob((blob) => {
+                            const formData = new FormData();
+                            formData.append('file', blob, uniqueFilename);
+
+                            fetch('/upload', {
+                                method: 'POST',
+                                body: formData
+                            })
+                            .then(response => {
+                                if (response.ok) {
+                                    return response.text();
+                                } else {
+                                    throw new Error("Error uploading captured photo.");
+                                }
+                            })
+                            .then(html => {
+                                document.body.removeChild(cameraContainer);
+                                document.open();
+                                document.write(html);
+                                document.close();
+                            })
+                            .catch(error => {
+                                alert("Error: " + error.message);
+                                captureButton.disabled = false;
+                                loader.style.display = 'none';
+                            });
+                        });
+                    });
+
+                    stopButton.addEventListener('click', () => {
+                        stream.getTracks().forEach(track => track.stop());
+                        document.body.removeChild(cameraContainer);
+                    });
+                })
+                .catch((error) => {
+                    alert("Unable to access camera: " + error.message);
+                    document.body.removeChild(cameraContainer);
+                });
+        }
+
+
+
+        function openChat() {
+            alert("Chatbot functionality coming soon!");
+        }
+    </script>
+</body>
+</html> -->
+
