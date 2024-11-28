@@ -1,0 +1,5 @@
+flask
+keras
+PIL
+numpy
+transformers
