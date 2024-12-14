@@ -93,7 +93,7 @@ project/
    - To lognin as User use username and password as: user
    - To lognin as Admin use username and password as: admin
 
-   ![alt text](image.png)
+   ![alt text](App_Images/image.png)
 
 2. **User Dashboard**:
    - Upload crop image.
