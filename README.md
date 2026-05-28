@@ -1,4 +1,22 @@
-# Crop Disease Detection and Chatbot Application
+<div align="center">
+  <h1 align="center">Crop-Doctor-Final-Year-Project-</h1>
+  <p align="center">
+    <strong>Crop Disease Detection and Chatbot Application using Deep Learning.</strong>
+  </p>
+  <p align="center">
+    <img src="https://img.shields.io/github/license/CoderFatherBB/Crop-Doctor-Final-Year-Project-?style=flat-square&color=007ec6" alt="License">
+    <img src="https://img.shields.io/github/repo-size/CoderFatherBB/Crop-Doctor-Final-Year-Project-?style=flat-square&color=007ec6" alt="Repo Size">
+    <img src="https://img.shields.io/github/last-commit/CoderFatherBB/Crop-Doctor-Final-Year-Project-?style=flat-square&color=007ec6" alt="Last Commit">
+  </p>
+</div>
+
+---
+
+## 📖 Overview
+
+Welcome to the **Crop-Doctor-Final-Year-Project-** repository. Crop Disease Detection and Chatbot Application using Deep Learning.
+
+### Existing Documentation\n\n# Crop Disease Detection and Chatbot Application
 
 ### Overview
 This project is a comprehensive Flask-based application designed to help farmers and agricultural enthusiasts identify crop diseases and enhance productivity. It includes an intelligent chatbot, crop disease detection using machine learning models, and an admin portal for adding new models.
@@ -148,4 +166,46 @@ project/
 ---
 
 ## License
-This project is licensed under the MIT License. See the `LICENSE` file for details.
+This project is licensed under the MIT License. See the `LICENSE` file for details.\n
+
+---
+
+## 🚀 Getting Started
+
+### Prerequisites
+
+Make sure you have the necessary environment setup to run or build the project. Depending on the repository's technology stack, you may need:
+- Standard language compilers/interpreters (e.g., Python, C++, Java).
+- Required frameworks and libraries as per the codebase.
+
+### Installation & Usage
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/CoderFatherBB/Crop-Doctor-Final-Year-Project-.git
+   ```
+2. Navigate to the project directory:
+   ```bash
+   cd Crop-Doctor-Final-Year-Project-
+   ```
+3. Run or execute the relevant files as per the language standards.
+
+---
+
+## 🤝 Contributing
+
+Contributions, issues, and feature requests are welcome! Feel free to check the [issues page](https://github.com/CoderFatherBB/Crop-Doctor-Final-Year-Project-/issues).
+
+---
+
+## 👤 Author
+
+**Bhavin Baldota**
+
+- LinkedIn: [Bhavin Baldota](https://www.linkedin.com/in/bhavin-baldota-103553234/)
+- GitHub: [@CoderFatherBB](https://github.com/CoderFatherBB)
+
+---
+<div align="center">
+  <sub>Made with ❤️ by Bhavin Baldota</sub>
+</div>
