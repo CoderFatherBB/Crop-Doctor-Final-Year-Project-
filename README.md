@@ -20,3 +20,22 @@ Built heavily on deep Convolutional Neural Networks (CNNs) using TensorFlow/Kera
 
 ## 📄 License
 This project is licensed under the MIT License - see the LICENSE file for details.
+
+## 📸 Screenshots
+1. **Login Dashboard**
+   ![alt text](App_Images/image.png)
+
+2. **User Dashboard** (Upload crop image, Chatbot integration):
+   ![alt text](App_Images/image-1.png)
+
+3. **Admin Dashboard** (Train a new model):
+   ![alt text](App_Images/image-2.png)
+
+4. **Train Model** (Crop and class selection with image upload):
+   ![alt text](App_Images/image-3.png)    ![alt text](App_Images/image-4.png)
+
+5. **Disease Detection Results** (Shows the detected disease with confidence):
+   ![alt text](App_Images/image-5.png)    ![alt text](App_Images/image-6.png)
+
+6. **Chatbot** (Interaction with AgriBot):
+   ![alt text](App_Images/image-7.png)
